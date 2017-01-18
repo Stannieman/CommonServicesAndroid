@@ -1,10 +1,14 @@
 package stannieman.commonservices.models;
 
+/**
+ * Class representing the result of some action.
+ * @param <DataType> the type of the result data
+ */
 public class ServiceResult<DataType> {
 
     /**
      * Result code indicating that the operation was successful.
-     * This code (0) is the only reserved code is the default one.
+     * This code (0) is the only reserved code and is the default one.
      */
     public static final int OK = 0;
 
