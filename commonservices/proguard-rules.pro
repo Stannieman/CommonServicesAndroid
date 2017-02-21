@@ -1,1 +1,0 @@
--keep class stannieman.commonservices.models.ServiceResult
