@@ -1,32 +1,32 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0.0.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        versionCode 9
+        versionName "1.0.1.0"
     }
 }
 
-dependencies {
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-    compile 'com.android.support:appcompat-v7:25.0.1'
-//    testCompile 'junit:junit:4.12'
+task createJavaDoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task createJavaDocJar(type: Jar, dependsOn: createJavaDoc) {
+    classifier = 'javadoc'
+    from createJavaDoc.destinationDir
+}
+
+task createSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
 }
 
 publishing {
@@ -34,8 +34,10 @@ publishing {
         maven(MavenPublication) {
             groupId 'be.stannieman'
             artifactId 'commonservices'
-            version '1.0.0.0'
-            artifact "$buildDir\\outputs\\aar\\commonservices-release.aar"
+            version '1.0.1.0'
+            artifact "$buildDir\\outputs\\aar\\signed-${project.getName()}-release.aar"
+            artifact createJavaDocJar
+            artifact createSourcesJar
 
             //generate pom nodes for dependencies
             pom.withXml {

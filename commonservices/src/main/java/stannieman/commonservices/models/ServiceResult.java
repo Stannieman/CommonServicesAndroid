@@ -1,12 +1,11 @@
 package stannieman.commonservices.models;
 
-public class ServiceResult<DataType> {
-
-    /**
-     * Result code indicating that the operation was successful.
-     * This code (0) is the only reserved code is the default one.
-     */
-    public static final int OK = 0;
+/**
+ * Class representing the result of some action.
+ * @param <DataType> the type of the result data
+ * @param <ResultCodeType> the type of the result code
+ */
+public final class ServiceResult<DataType, ResultCodeType> implements IHasSuccessState, IHasResultCode<ResultCodeType>, IHasDataAndSuccessState<DataType> {
 
     //region isSuccess
 
@@ -14,23 +13,23 @@ public class ServiceResult<DataType> {
 
     /**
      * Returns whether the operation completed successfully.
-     * @return true if the operation completed successfully, false otherwise
+     * @return true if the result code is GeneralResultCodes.OK, false otherwise
      */
     public boolean isSuccess() {
-        return isSuccess;
+        return isSuccess || resultCode == GeneralResultCodes.OK;
     }
 
     //endregion
 
     //region resultCode
 
-    private int resultCode;
+    private ResultCodeType resultCode;
 
     /**
-     * Returns the result code of the operation.
-     * @return the result code of the operation
+     * Returns the result code.
+     * @return the result code
      */
-    public int getResultCode() {
+    public ResultCodeType getResultCode() {
         return resultCode;
     }
 
@@ -52,44 +51,29 @@ public class ServiceResult<DataType> {
 
     /**
      * Default constructor.
-     * Initializes the result as successful with the default result code.
+     * Initializes the result as successful without result code.
+     * The data is left null.
      */
     public ServiceResult() {
-        this.isSuccess = true;
-        this.resultCode = OK;
+        isSuccess = true;
     }
 
     /**
-     * Constructor to set the isSuccess state and result code.
-     * The data left null.
-     * @param isSuccess whether the operation completed successfully
-     * @param resultCode result code of the operation
+     * Initializes the result with the given result code.
+     * The data is left null.
+     * @param resultCode the result code
      */
-    public ServiceResult(boolean isSuccess, int resultCode) {
-        this.isSuccess = isSuccess;
+    public ServiceResult(ResultCodeType resultCode) {
         this.resultCode = resultCode;
     }
 
     /**
-     * Constructor that sets the return data.
-     * The result is initialized as successful with the default result code.
-     * @param data return data of the operation
+     * Initializes the result with the given data and result code.
+     * @param data the data
+     * @param resultCode the result code
      */
-    public ServiceResult(DataType data) {
-        this.isSuccess = true;
-        this.resultCode = OK;
+    public ServiceResult(DataType data, ResultCodeType resultCode) {
         this.data = data;
-    }
-
-    /**
-     * Constructor that sets the return data, isSuccess state and result code.
-     * @param isSuccess whether the operation
-     * @param resultCode result code of the operation
-     * @param data return data of the operation
-     */
-    public ServiceResult(boolean isSuccess, int resultCode, DataType data) {
-        this.isSuccess = isSuccess;
         this.resultCode = resultCode;
-        this.data = data;
     }
 }
