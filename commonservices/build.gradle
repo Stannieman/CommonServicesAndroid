@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.0.1.0"
+        versionCode 10
+        versionName "1.0.2.0"
     }
 }
 
@@ -34,7 +34,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'be.stannieman'
             artifactId 'commonservices'
-            version '1.0.1.0'
+            version '1.0.2.0'
             artifact "$buildDir\\outputs\\aar\\signed-${project.getName()}-release.aar"
             artifact createJavaDocJar
             artifact createSourcesJar
